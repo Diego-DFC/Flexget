@@ -31,6 +31,7 @@ class OutputQBitTorrent:
         maxupspeed: <torrent upload speed limit> (default: 0)
         maxdownspeed: <torrent download speed limit> (default: 0)
         add_paused: <ADD_PAUSED> (default: False)
+        sequential_download: <SEQUENTIAL_DOWNLOAD> (default: False)
         ratio_limit: <RATIO_LIMIT> (default: -2)
         seeding_time_limit: <SEEDING_TIME_LIMIT> (default: -1)
     """
@@ -54,6 +55,7 @@ class OutputQBitTorrent:
                     'maxdownspeed': {'type': 'integer'},
                     'fail_html': {'type': 'boolean'},
                     'add_paused': {'type': 'boolean'},
+                    'sequential_download' : {'type': 'boolean'},
                     'skip_check': {'type': 'boolean'},
                     'ratio_limit': {'type': 'number'},
                     'seeding_time_limit': {'type': 'string', 'format': 'interval'},
@@ -255,6 +257,10 @@ class OutputQBitTorrent:
                 form_data['paused'] = 'true'  # qBittorrent v4.6.7-
                 form_data['stopped'] = 'true'  # qBittorrent v5.0.0+
 
+            sequential_download = entry.get('sequential_download', config.get('sequential_download'))
+            if sequential_download:
+                form_data['sequentialDownload'] = 'true'  # qBittorrent v4.6.7-
+            
             skip_check = entry.get('skip_check', config.get('skip_check'))
             if skip_check:
                 form_data['skip_checking'] = 'true'
