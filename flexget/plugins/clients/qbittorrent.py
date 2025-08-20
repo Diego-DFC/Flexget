@@ -34,6 +34,7 @@ class OutputQBitTorrent:
           add_paused: <ADD_PAUSED> (default: False)
           ratio_limit: <RATIO_LIMIT> (default: -2)
           seeding_time_limit: <SEEDING_TIME_LIMIT> (default: -1)
+          sequential_download: <SEQUENTIAL_DOWNLOAD> (default: False)
     """
 
     schema = {
@@ -58,6 +59,7 @@ class OutputQBitTorrent:
                     'skip_check': {'type': 'boolean'},
                     'ratio_limit': {'type': 'number'},
                     'seeding_time_limit': {'type': 'string', 'format': 'interval'},
+                    'sequential_download': {'type': 'boolean'},
                 },
                 'additionalProperties': False,
             },
@@ -255,6 +257,10 @@ class OutputQBitTorrent:
                 form_data['paused'] = 'true'  # qBittorrent v4.6.7-
                 form_data['stopped'] = 'true'  # qBittorrent v5.0.0+
 
+            sequential_download = entry.get('sequential_download', config.get('sequential_download'))
+            if sequential_download:
+                form_data['sequentialDownload'] = 'true'
+    
             skip_check = entry.get('skip_check', config.get('skip_check'))
             if skip_check:
                 form_data['skip_checking'] = 'true'
